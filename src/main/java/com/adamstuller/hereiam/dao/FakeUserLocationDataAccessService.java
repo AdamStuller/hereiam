@@ -76,4 +76,10 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public List<UserLocation> getPointsWithinRaius(UserLocation center, int radius) {
+        // Just dummy solution, in FakeDao, only few points are present.
+        return DB;
+    }
 }

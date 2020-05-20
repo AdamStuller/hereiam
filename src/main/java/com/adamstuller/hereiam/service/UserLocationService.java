@@ -1,6 +1,7 @@
 package com.adamstuller.hereiam.service;
 
 import com.adamstuller.hereiam.dao.UserLocationDao;
+import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserLocationService {
@@ -38,5 +40,13 @@ public class UserLocationService {
 
     public UserLocation getByToken(String token){
         return this.userDao.getUserByToken(token);
+    }
+
+    public List<Point> getPointsWithinRadius(UserLocation center, int radius){
+        return this.userDao
+                .getPointsWithinRaius(center, radius)
+                .stream()
+                .map(userLocation -> userLocation.getPoint())
+                .collect(Collectors.toList());
     }
 }

@@ -1,8 +1,8 @@
 package com.adamstuller.hereiam.api;
 
+import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import com.adamstuller.hereiam.service.UserLocationService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +47,13 @@ public class UserLocationController {
         return userLocationService.updateUserLocation(token, userLocation);
     }
 
+    @PostMapping(path = "/radius")
+    public List<Point> getPointsWithinRadius(
+            @RequestParam Integer radius,
+            @RequestBody UserLocation center
+    ) {
+        return userLocationService.getPointsWithinRadius(center, radius);
+    }
 
 
 }
