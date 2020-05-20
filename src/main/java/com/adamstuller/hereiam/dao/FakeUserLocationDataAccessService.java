@@ -1,5 +1,6 @@
 package com.adamstuller.hereiam.dao;
 
+import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
 
     @Override
     public int insertUserLocation(UserLocation userLocation) {
+        logger.info(userLocation.toString());
         DB.add(userLocation);
         return 0;
     }
@@ -53,8 +55,10 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
                         updateIndex,
                         new UserLocation(
                                 userLocation.getToken(),
-                                userLocation.getLangitute(),
-                                userLocation.getLongtitute()
+                                new Point(
+                                        userLocation.getPoint().getLatitude(),
+                                        userLocation.getPoint().getLongitude()
+                                )
                         )
                 );
                 logger.info(Arrays.toString(DB.toArray()));

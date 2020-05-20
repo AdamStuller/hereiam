@@ -1,45 +1,29 @@
 package com.adamstuller.hereiam.models;
 
-import java.util.UUID;
-
 public class UserLocation {
 
     private final String token;
-    private float langitute;
-    private float longtitute;
+    private Point point;
 
-    public UserLocation(String token, float langitute, float longtitute) {
+    public UserLocation(String token, Point point) {
         this.token = token;
-        this.langitute = langitute;
-        this.longtitute = longtitute;
+        this.point = point;
     }
 
     public String getToken() {
         return token;
     }
 
-    public float getLangitute() {
-        return langitute;
-    }
-
-    public void setLangitute(float langitute) {
-        this.langitute = langitute;
-    }
-
-    public float getLongtitute() {
-        return longtitute;
-    }
-
-    public void setLongtitute(float longtitute) {
-        this.longtitute = longtitute;
+    public Point getPoint() {
+        return point;
     }
 
     @Override
     public String toString() {
         return "UserLocation{" +
                 "token='" + token + '\'' +
-                ", langitute=" + langitute +
-                ", longtitute=" + longtitute +
+                ", langitute=" + point.getLatitude() +
+                ", longtitute=" + point.getLongitude() +
                 '}';
     }
 }
