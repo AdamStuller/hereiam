@@ -3,10 +3,12 @@ package com.adamstuller.hereiam.api;
 import com.adamstuller.hereiam.models.UserLocation;
 import com.adamstuller.hereiam.service.UserLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("api/v1/userLocation")
+import java.util.List;
+
+@RequestMapping("api/v1/userLocation")
+@RestController
 public class UserLocationController {
 
     private final UserLocationService userLocationService;
@@ -17,8 +19,15 @@ public class UserLocationController {
     }
 
     @PostMapping
-    public void addUserLocation(UserLocation userLocation){
+    public void addUserLocation(@RequestBody UserLocation userLocation){
         userLocationService.addUserLocation(userLocation);
     }
+
+    @GetMapping
+    public List<UserLocation> getAllUserLocations(){
+        return userLocationService.getAllUserLocation();
+    }
+
+
 
 }

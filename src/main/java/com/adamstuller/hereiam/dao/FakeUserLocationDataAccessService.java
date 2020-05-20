@@ -7,15 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Repository("fake")
+@Repository("fakeDao")
 public class FakeUserLocationDataAccessService implements UserLocationDao{
 
     private static List<UserLocation> DB = new ArrayList<>();
 
 
     @Override
-    public int insetUserLocation(UUID uuid, UserLocation userLocation) {
-        DB.add(new UserLocation(userLocation.getToken(), uuid, userLocation.getLangitute(), userLocation.getLongtitute()));
+    public int insertUserLocation(UserLocation userLocation) {
+        DB.add(userLocation);
         return 0;
+    }
+
+    @Override
+    public List<UserLocation> getAllUserLocations() {
+        return DB;
     }
 }

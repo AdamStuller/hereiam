@@ -2,9 +2,12 @@ package com.adamstuller.hereiam.service;
 
 import com.adamstuller.hereiam.dao.UserLocationDao;
 import com.adamstuller.hereiam.models.UserLocation;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserLocationService {
@@ -12,11 +15,15 @@ public class UserLocationService {
     private final UserLocationDao userDao;
 
     @Autowired
-    public UserLocationService(@Qualifier("fake") UserLocationDao userDao) {
+    public UserLocationService(@Qualifier("fakeDao") UserLocationDao userDao) {
         this.userDao = userDao;
     }
 
     public int addUserLocation(UserLocation userLocation){
         return this.userDao.insertUserLocation(userLocation);
+    }
+
+    public List<UserLocation> getAllUserLocation(){
+        return this.userDao.getAllUserLocations();
     }
 }
