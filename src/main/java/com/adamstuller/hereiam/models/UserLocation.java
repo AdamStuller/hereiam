@@ -8,7 +8,7 @@ public class UserLocation {
     private float langitute;
     private float longtitute;
 
-    public UserLocation(String token, UUID uuid, float langitute, float longtitute) {
+    public UserLocation(String token, float langitute, float longtitute) {
         this.token = token;
         this.langitute = langitute;
         this.longtitute = longtitute;
@@ -34,5 +34,12 @@ public class UserLocation {
         this.longtitute = longtitute;
     }
 
-
+    @Override
+    public String toString() {
+        return "UserLocation{" +
+                "token='" + token + '\'' +
+                ", langitute=" + langitute +
+                ", longtitute=" + longtitute +
+                '}';
+    }
 }

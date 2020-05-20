@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserLocationService {
@@ -25,5 +26,17 @@ public class UserLocationService {
 
     public List<UserLocation> getAllUserLocation(){
         return this.userDao.getAllUserLocations();
+    }
+
+    public int deleteUserLocation(String token){
+        return this.userDao.deleteUserLocation(token);
+    }
+
+    public int updateUserLocation(String token, UserLocation userLocation){
+        return this.userDao.updateUserLocation(token, userLocation);
+    }
+
+    public UserLocation getByToken(String token){
+        return this.userDao.getUserByToken(token);
     }
 }
