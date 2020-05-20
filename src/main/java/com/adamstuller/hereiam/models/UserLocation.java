@@ -1,9 +1,16 @@
 package com.adamstuller.hereiam.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.lang.NonNull;
+
 public class UserLocation {
 
+    @JsonProperty("token")
     private final String token;
-    private Point point;
+
+    @JsonProperty("point")
+    @NonNull
+    private final Point point;
 
     public UserLocation(String token, Point point) {
         this.token = token;
@@ -22,8 +29,8 @@ public class UserLocation {
     public String toString() {
         return "UserLocation{" +
                 "token='" + token + '\'' +
-                ", langitute=" + point.getLatitude() +
-                ", longtitute=" + point.getLongitude() +
+                ", latitute=" + point.getLatitude() +
+                ", longitute=" + point.getLongitude() +
                 '}';
     }
 }

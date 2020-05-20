@@ -1,9 +1,13 @@
 package com.adamstuller.hereiam.api;
 
+import com.adamstuller.hereiam.dao.FakeUserLocationDataAccessService;
 import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import com.adamstuller.hereiam.service.UserLocationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
 public class UserLocationController {
 
     private final UserLocationService userLocationService;
+//    Logger logger = LoggerFactory.getLogger(UserLocationController.class);
 
     @Autowired
     public UserLocationController(UserLocationService userLocationService) {
@@ -20,7 +25,7 @@ public class UserLocationController {
     }
 
     @PostMapping
-    public void addUserLocation(@RequestBody UserLocation userLocation){
+    public void addUserLocation(@Validated @RequestBody UserLocation userLocation){
         userLocationService.addUserLocation(userLocation);
     }
 
