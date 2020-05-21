@@ -9,13 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Dummy implementation of data access service. Exposing full interface.
+ * Internally represented by ArrayList DB.
+ */
 @Repository("fakeDao")
 public class FakeUserLocationDataAccessService implements UserLocationDao{
 
     Logger logger = LoggerFactory.getLogger(FakeUserLocationDataAccessService.class);
+    /**
+     * Dummy  storage implementation.
+     */
     private static List<UserLocation> DB = new ArrayList<>();
 
 
+    /**
+     * Inserts new user location into dummy data storage.
+     * @param userLocation User location to be inserted
+     * @return
+     */
     @Override
     public int insertUserLocation(UserLocation userLocation) {
         logger.info(userLocation.toString());
@@ -23,11 +35,20 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
         return 0;
     }
 
+    /**
+     * Dummy get all implementation.
+     * @return Whole dummy storage
+     */
     @Override
     public List<UserLocation> getAllUserLocations() {
         return DB;
     }
 
+    /**
+     * Dummy delete implementation.
+     * @param token Unique server side id. Determines which user location to remove.
+     * @return
+     */
     @Override
     public int deleteUserLocation(String token) {
         UserLocation userLocation = this.getUserByToken(token);
@@ -40,6 +61,12 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
         return 0;
     }
 
+    /**
+     * Dummy update representation.
+     * @param token Unique server side id. Determines which user location to update.
+     * @param userLocation New user location, that replaces old on its place in dummy storage.
+     * @return
+     */
     @Override
     public int updateUserLocation(String token, UserLocation userLocation) {
 //        UserLocation originalUserLocation = this.getUserByToken(token);
@@ -67,6 +94,11 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
         return 0;
     }
 
+    /**
+     * Dummy get by token implementation.
+     * @param token Unique server side id. Determines which user location to update.
+     * @return Required user location. Has same token.
+     */
     @Override
     public UserLocation getUserByToken(String token) {
         return DB.stream()
@@ -75,6 +107,12 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
                 .orElse(null);
     }
 
+    /**
+     * Dummy implementation. Should return only points from within distance.
+     * @param center Center of circle.
+     * @param radius Maximal distance
+     * @return Whole  storage.
+     */
     @Override
     public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius) {
         // Just dummy solution, in FakeDao, only few points are present.

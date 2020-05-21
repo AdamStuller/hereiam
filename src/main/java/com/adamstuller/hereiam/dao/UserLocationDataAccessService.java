@@ -9,6 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Proper postgres based implementation of data access storage.
+ * Uses Postgis specific functions. Thus jdbcTemplate is used for executing raw sql queries.
+ */
 @Repository("postgres")
 public class UserLocationDataAccessService implements UserLocationDao {
 
@@ -21,6 +25,11 @@ public class UserLocationDataAccessService implements UserLocationDao {
     }
 
 
+    /**
+     * Inserts new user location into postgres.
+     * @param userLocation New user location to be inserted into database.
+     * @return 0 if success.
+     */
     @Override
     public int insertUserLocation(UserLocation userLocation) {
         final String sql = "INSERT INTO user_location (token, point) VALUES (?,  ST_SetSRID(ST_MakePoint(? , ?), 4326))";
@@ -36,6 +45,10 @@ public class UserLocationDataAccessService implements UserLocationDao {
         return 0;
     }
 
+    /**
+     * Gets all user locationd from db.
+     * @return All user locations.
+     */
     @Override
     public List<UserLocation> getAllUserLocations() {
         final String  sql = "SELECT id, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location";
@@ -51,6 +64,11 @@ public class UserLocationDataAccessService implements UserLocationDao {
         );
     }
 
+    /**
+     * Deletes entry in user_location table, whose token matches passed token.
+     * @param token Unique client side identifier.
+     * @return 0 if success.
+     */
     @Override
     public int deleteUserLocation(String token) {
         final String sql = "DELETE FROM user_location WHERE token = ?";
@@ -63,6 +81,12 @@ public class UserLocationDataAccessService implements UserLocationDao {
         return 0;
     }
 
+    /**
+     * Updates point on given token.
+     * @param token Unique client side identifier.
+     * @param userLocation User location with updated coordinates
+     * @return 0 if success.
+     */
     @Override
     public int updateUserLocation(String token, UserLocation userLocation) {
 
@@ -79,6 +103,11 @@ public class UserLocationDataAccessService implements UserLocationDao {
         return 0;
     }
 
+    /**
+     * Returns single user location specified by token.
+     * @param token Unique client side identifier.
+     * @return Searched for user location.
+     */
     @Override
     public UserLocation getUserByToken(String token) {
         final String  sql = "SELECT id, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location" +
@@ -101,9 +130,16 @@ public class UserLocationDataAccessService implements UserLocationDao {
         return userLocation;
     }
 
+    /**
+     * Finds all user locations that are closer to center than radius.
+     * @param center Point from where distances are calculated
+     * @param radius Maximum distance
+     * @return User locations from within radius
+     */
     @Override
     public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius) {
 
+        // Uses ST_Distance - calculates distances between points.
         final String sql = "SELECT id, point, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location" +
                 " WHERE round(CAST(ST_Distance(point, ST_GeomFromText('POINT(" +
                 center.getPoint().getX() + " " + center.getPoint().getY() +
