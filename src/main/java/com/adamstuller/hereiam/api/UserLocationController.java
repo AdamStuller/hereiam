@@ -6,11 +6,13 @@ import com.vividsolutions.jts.geom.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequestMapping("api/v1/userLocation")
@@ -25,15 +27,18 @@ public class UserLocationController {
         this.userLocationService = userLocationService;
     }
 
-    @PostMapping
-    public void addUserLocation(@Validated @RequestBody UserLocation userLocation){
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void addUserLocation(@Validated @RequestBody Map<String, String> req){
+        final String token = req.get("token");
+        final Float lan = Float.parseFloat(req.get("latitude"));
+        final Float lon = Float.parseFloat(req.get("longitude"));
+        UserLocation userLocation= new UserLocation(token, lan, lon);
         userLocationService.addUserLocation(userLocation);
     }
 
     @GetMapping
-    public List<String> getAllUserLocations(){
-        List<UserLocation> userLocations =  userLocationService.getAllUserLocation();
-        return userLocations.stream().map(userLocation -> userLocation.toString()).collect(Collectors.toList());
+    public List<UserLocation> getAllUserLocations(){
+        return userLocationService.getAllUserLocation();
     }
 
     @GetMapping( path = "{token}")

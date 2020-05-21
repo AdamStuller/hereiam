@@ -7,5 +7,6 @@ https://stackoverflow.com/questions/18664074/getting-error-peer-authentication-f
 
 
 apt-get install vim
-/etc/init.d/postgresql reload
+
  vim /etc/postgresql/12/main/pg_hba.conf 
+ /etc/init.d/postgresql reload

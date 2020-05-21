@@ -32,6 +32,14 @@ public class UserLocationDataAccessService implements UserLocationDao {
 
     @Override
     public int insertUserLocation(UserLocation userLocation) {
+        logger.info(userLocation.toString());
+        jdbcTemplate.update(
+                "INSERT INTO user_location (token, point) VALUES (?,  ST_SetSRID(ST_MakePoint(? , ?), 4326))",
+                userLocation.getToken(),
+                userLocation.getPoint().getX(),
+                userLocation.getPoint().getY()
+        );
+
         return 0;
     }
 
@@ -40,14 +48,11 @@ public class UserLocationDataAccessService implements UserLocationDao {
         final String  sql = "SELECT id, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location";
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 {
-
                     Long id = resultSet.getLong("id");
                     Float x = resultSet.getFloat("x");
                     Float y = resultSet.getFloat("y");
                     String token = resultSet.getString("token");
-                    Point point = gf.createPoint(new Coordinate(x, y));
-                    UserLocation userLocation = new UserLocation(id, token, point);
-                    return new UserLocation(id, token, point);
+                    return new UserLocation(id, token, x, y);
                 }
         );
     }
@@ -64,7 +69,21 @@ public class UserLocationDataAccessService implements UserLocationDao {
 
     @Override
     public UserLocation getUserByToken(String token) {
-        return null;
+        final String  sql = "SELECT id, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location" +
+                " WHERE token = ?";
+
+        UserLocation userLocation = jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{token},
+                (resultSet, i) -> {
+                    Long id = resultSet.getLong("id");
+                    Float x = resultSet.getFloat("x");
+                    Float y = resultSet.getFloat("y");
+                    String userToken = resultSet.getString("token");
+                    return new UserLocation(id, userToken, x, y);
+                }
+        );
+        return userLocation;
     }
 
     @Override
