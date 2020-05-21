@@ -1,23 +1,24 @@
 package com.adamstuller.hereiam.api;
 
-import com.adamstuller.hereiam.dao.FakeUserLocationDataAccessService;
-import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import com.adamstuller.hereiam.service.UserLocationService;
+import com.vividsolutions.jts.geom.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("api/v1/userLocation")
 @RestController
 public class UserLocationController {
 
     private final UserLocationService userLocationService;
-//    Logger logger = LoggerFactory.getLogger(UserLocationController.class);
+    Logger logger = LoggerFactory.getLogger(UserLocationController.class);
 
     @Autowired
     public UserLocationController(UserLocationService userLocationService) {
@@ -30,8 +31,9 @@ public class UserLocationController {
     }
 
     @GetMapping
-    public List<UserLocation> getAllUserLocations(){
-        return userLocationService.getAllUserLocation();
+    public List<String> getAllUserLocations(){
+        List<UserLocation> userLocations =  userLocationService.getAllUserLocation();
+        return userLocations.stream().map(userLocation -> userLocation.toString()).collect(Collectors.toList());
     }
 
     @GetMapping( path = "{token}")

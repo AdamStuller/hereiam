@@ -1,15 +1,12 @@
 package com.adamstuller.hereiam.service;
-
 import com.adamstuller.hereiam.dao.UserLocationDao;
-import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
-import org.apache.catalina.User;
+import com.vividsolutions.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +15,7 @@ public class UserLocationService {
     private final UserLocationDao userDao;
 
     @Autowired
-    public UserLocationService(@Qualifier("fakeDao") UserLocationDao userDao) {
+    public UserLocationService(@Qualifier("postgres") UserLocationDao userDao) {
         this.userDao = userDao;
     }
 
@@ -44,7 +41,7 @@ public class UserLocationService {
 
     public List<Point> getPointsWithinRadius(UserLocation center, int radius){
         return this.userDao
-                .getPointsWithinRaius(center, radius)
+                .getPointsWithinRadius(center, radius)
                 .stream()
                 .map(userLocation -> userLocation.getPoint())
                 .collect(Collectors.toList());
