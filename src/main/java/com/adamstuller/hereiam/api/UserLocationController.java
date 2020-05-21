@@ -2,7 +2,6 @@ package com.adamstuller.hereiam.api;
 
 import com.adamstuller.hereiam.models.UserLocation;
 import com.adamstuller.hereiam.service.UserLocationService;
-import com.vividsolutions.jts.geom.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequestMapping("api/v1/userLocation")
 @RestController
@@ -33,6 +30,7 @@ public class UserLocationController {
         final Float lan = Float.parseFloat(req.get("latitude"));
         final Float lon = Float.parseFloat(req.get("longitude"));
         UserLocation userLocation= new UserLocation(token, lan, lon);
+        logger.info("Add user location accepted", userLocation);
         userLocationService.addUserLocation(userLocation);
     }
 
