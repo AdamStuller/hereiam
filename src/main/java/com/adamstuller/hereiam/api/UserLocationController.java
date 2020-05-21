@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 @RequestMapping("api/v1/userLocation")
 @RestController
@@ -65,7 +65,7 @@ public class UserLocationController {
     }
 
     @PostMapping(path = "/radius")
-    public List<UserLocation> getPointsWithinRadius(
+    public Stream<Map<String, Float>> getPointsWithinRadius(
             @RequestParam Integer radius,
             @RequestBody  Map<String, String> req
     ) {
@@ -73,8 +73,19 @@ public class UserLocationController {
         final Float lan = Float.parseFloat(req.get("latitude"));
         final Float lon = Float.parseFloat(req.get("longitude"));
         UserLocation center = new UserLocation(token, lan, lon);
+        logger.info("Get locations within radius");
         logger.info(center.toString());
-        return userLocationService.getPointsWithinRadius(center, radius);
+        logger.info(Integer.toString(radius));
+
+
+        return userLocationService.getPointsWithinRadius(center, radius)
+                .stream()
+                .map(userLocation -> {
+                    Map<String, Float> responseMap = new HashMap<>();
+                    responseMap.put("latitude", (float) userLocation.getPoint().getX());
+                    responseMap.put("longitude", (float) userLocation.getPoint().getY());
+                    return responseMap;
+                });
     }
 
 
