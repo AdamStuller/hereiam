@@ -30,12 +30,14 @@ public class UserLocationController {
         final Float lan = Float.parseFloat(req.get("latitude"));
         final Float lon = Float.parseFloat(req.get("longitude"));
         UserLocation userLocation= new UserLocation(token, lan, lon);
-        logger.info("Add user location accepted", userLocation);
+        logger.info("Add user location accepted");
+        logger.info( userLocation.toString());
         userLocationService.addUserLocation(userLocation);
     }
 
     @GetMapping
     public List<UserLocation> getAllUserLocations(){
+        logger.info("All user locations accepted!");
         return userLocationService.getAllUserLocation();
     }
 
