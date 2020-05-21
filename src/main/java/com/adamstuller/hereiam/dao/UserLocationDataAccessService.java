@@ -61,6 +61,10 @@ public class UserLocationDataAccessService implements UserLocationDao {
 
     @Override
     public int deleteUserLocation(String token) {
+        jdbcTemplate.update(
+                "DELETE FROM user_location WHERE token = ?",
+                token
+        );
         return 0;
     }
 
