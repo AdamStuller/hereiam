@@ -1,13 +1,11 @@
 package com.adamstuller.hereiam.dao;
 
-import com.adamstuller.hereiam.models.Point;
 import com.adamstuller.hereiam.models.UserLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -44,28 +42,28 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
 
     @Override
     public int updateUserLocation(String token, UserLocation userLocation) {
-        UserLocation originalUserLocation = this.getUserByToken(token);
-        if(originalUserLocation != null){
-            int updateIndex = DB.indexOf(originalUserLocation);
-            if(updateIndex >= 0){
-                logger.info(Integer.toString(updateIndex));
-                logger.info(userLocation.toString());
-                logger.info(Arrays.toString(DB.toArray()));
-                DB.set(
-                        updateIndex,
-                        new UserLocation(
-                                userLocation.getToken(),
-                                new Point(
-                                        userLocation.getPoint().getLatitude(),
-                                        userLocation.getPoint().getLongitude()
-                                )
-                        )
-                );
-                logger.info(Arrays.toString(DB.toArray()));
-                return 1;
-            }
-            return 0;
-        }
+//        UserLocation originalUserLocation = this.getUserByToken(token);
+//        if(originalUserLocation != null){
+//            int updateIndex = DB.indexOf(originalUserLocation);
+//            if(updateIndex >= 0){
+//                logger.info(Integer.toString(updateIndex));
+//                logger.info(userLocation.toString());
+//                logger.info(Arrays.toString(DB.toArray()));
+//                DB.set(
+//                        updateIndex,
+//                        new UserLocation(
+//                                userLocation.getToken(),
+//                                new Point(
+//                                        userLocation.getPoint().getLatitude(),
+//                                        userLocation.getPoint().getLongitude()
+//                                )
+//                        )
+//                );
+//                logger.info(Arrays.toString(DB.toArray()));
+//                return 1;
+//            }
+//            return 0;
+//        }
         return 0;
     }
 
@@ -78,7 +76,7 @@ public class FakeUserLocationDataAccessService implements UserLocationDao{
     }
 
     @Override
-    public List<UserLocation> getPointsWithinRaius(UserLocation center, int radius) {
+    public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius) {
         // Just dummy solution, in FakeDao, only few points are present.
         return DB;
     }

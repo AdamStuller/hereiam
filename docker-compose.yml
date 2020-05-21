@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  postgis:
+    image: kartoza/postgis:12.0
+    container_name: postgis
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASS: "postgres"
+      POSTGRES_DBNAME: "postgres_db"
+    ports:
+      - "5432:5432"
