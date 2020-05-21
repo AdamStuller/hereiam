@@ -54,16 +54,26 @@ public class UserLocationController {
     @PutMapping(path = "{token}")
     public int updateUserLocation(
             @PathVariable("token") String token,
-            @RequestBody UserLocation userLocation
+            @RequestBody Map<String, String> req
     ){
+        final String reqToken = req.get("token");
+        final Float lan = Float.parseFloat(req.get("latitude"));
+        final Float lon = Float.parseFloat(req.get("longitude"));
+        UserLocation userLocation = new UserLocation(reqToken, lan, lon);
+        logger.info(userLocation.toString());
         return userLocationService.updateUserLocation(token, userLocation);
     }
 
     @PostMapping(path = "/radius")
-    public List<Point> getPointsWithinRadius(
+    public List<UserLocation> getPointsWithinRadius(
             @RequestParam Integer radius,
-            @RequestBody UserLocation center
+            @RequestBody  Map<String, String> req
     ) {
+        final String token = req.get("token");
+        final Float lan = Float.parseFloat(req.get("latitude"));
+        final Float lon = Float.parseFloat(req.get("longitude"));
+        UserLocation center = new UserLocation(token, lan, lon);
+        logger.info(center.toString());
         return userLocationService.getPointsWithinRadius(center, radius);
     }
 

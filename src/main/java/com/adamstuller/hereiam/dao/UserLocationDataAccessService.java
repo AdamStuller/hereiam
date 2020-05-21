@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.jws.soap.SOAPBinding;
+import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository("postgres")
@@ -64,6 +66,12 @@ public class UserLocationDataAccessService implements UserLocationDao {
 
     @Override
     public int updateUserLocation(String token, UserLocation userLocation) {
+        jdbcTemplate.update(
+                "UPDATE user_location SET point = ST_SetSRID(ST_MakePoint(? , ?), 4326) WHERE token = ?",
+                userLocation.getPoint().getX(),
+                userLocation.getPoint().getY(),
+                token
+        );
         return 0;
     }
 
@@ -71,6 +79,8 @@ public class UserLocationDataAccessService implements UserLocationDao {
     public UserLocation getUserByToken(String token) {
         final String  sql = "SELECT id, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location" +
                 " WHERE token = ?";
+
+        logger.info(sql);
 
         UserLocation userLocation = jdbcTemplate.queryForObject(
                 sql,
@@ -88,6 +98,24 @@ public class UserLocationDataAccessService implements UserLocationDao {
 
     @Override
     public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius) {
-        return null;
+
+        final String sql = "SELECT id, point, token, ST_X(point) AS x, ST_Y(point) AS y FROM user_location" +
+                " WHERE round(CAST(ST_Distance(point, ST_GeomFromText('POINT(" +
+                center.getPoint().getX() + " " + center.getPoint().getY() +
+                ")',4326)) As numeric),2) < " + radius + ";";
+
+        logger.info(sql);
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, i) -> {
+                    Long id = resultSet.getLong("id");
+                    Float x = resultSet.getFloat("x");
+                    Float y = resultSet.getFloat("y");
+                    String userToken = resultSet.getString("token");
+                    return new UserLocation(id, userToken, x, y);
+                }
+        );
+
     }
 }

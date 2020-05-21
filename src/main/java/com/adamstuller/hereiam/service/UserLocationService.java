@@ -39,11 +39,10 @@ public class UserLocationService {
         return this.userDao.getUserByToken(token);
     }
 
-    public List<Point> getPointsWithinRadius(UserLocation center, int radius){
-        return this.userDao
-                .getPointsWithinRadius(center, radius)
-                .stream()
-                .map(userLocation -> userLocation.getPoint())
-                .collect(Collectors.toList());
+    public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius){
+        return this.userDao.getPointsWithinRadius(center, radius);
+//                .stream()
+//                .map(userLocation -> userLocation.getPoint())
+//                .collect(Collectors.toList());
     }
 }
