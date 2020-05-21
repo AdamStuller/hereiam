@@ -9,11 +9,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Place for business logic. Accessed data trough data access service and can do operations on it.
+ * In this case, however only calls methods of data access service.
+ */
 @Service
 public class UserLocationService {
 
     private final UserLocationDao userDao;
 
+    // postgres DAO is used.
     @Autowired
     public UserLocationService(@Qualifier("postgres") UserLocationDao userDao) {
         this.userDao = userDao;
@@ -41,8 +46,5 @@ public class UserLocationService {
 
     public List<UserLocation> getPointsWithinRadius(UserLocation center, int radius){
         return this.userDao.getPointsWithinRadius(center, radius);
-//                .stream()
-//                .map(userLocation -> userLocation.getPoint())
-//                .collect(Collectors.toList());
     }
 }
