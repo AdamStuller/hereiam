@@ -1,9 +1,7 @@
 package com.adamstuller.hereiam.models;
 
-import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -31,19 +29,32 @@ public class UserLocation {
 
     @JsonProperty("point")
     @NonNull
+    // Special Postgis specific type
     @Column(columnDefinition="geometry(Point,4326)", nullable=true)
     @JsonSerialize(using = GeometrySerializer.class)
-//    @JsonDeserialize(using = GeometryDeserializer.class)
     private Point point;
 
     public UserLocation() {
     }
 
+    /**
+     * Constructor creating user location without id.
+     * @param token Unique identification from client side
+     * @param lantitute X coordination
+     * @param longitute Y coordination
+     */
     public UserLocation( String token, Float lantitute, Float longitute) {
         this.token = token;
         this.point = gf.createPoint(new Coordinate(lantitute,longitute));
     }
 
+    /**
+     * Constructor setting id and token directly. Point is created from x and y coordinates.
+     * @param id Unique identification number of user location
+     * @param token Unique identification from client side
+     * @param lantitute X coordination
+     * @param longitute Y coordination
+     */
     public UserLocation(Long id, String token, Float lantitute, Float longitute) {
         this.id = id;
         this.token = token;
